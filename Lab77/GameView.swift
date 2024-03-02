@@ -88,27 +88,48 @@ struct GameView: View {
         }
     }
  
-    
     func revealImage(atRow row: Int, column: Int) {
-        let image = gameImages[row][column]
-        if !image.isRevealed {
-            // Revela la imagen
-            gameImages[row][column].isRevealed = true
-            gameSettings.attempts += 1
+            let image = gameImages[row][column]
+            if !image.isRevealed {
+                gameImages[row][column].isRevealed = true
+                gameSettings.attempts += 1
 
-            // Verifica si es la primera imagen de este tipo en ser revelada
-            if gameSettings.revealDirection[image.name] == nil {
-                // Decide una dirección. Ejemplo: siempre a la derecha
-                gameSettings.setRevealDirection(for: image.name, direction: .right)
+                if let direction = gameSettings.revealDirection[image.name], let lastPosition = gameSettings.lastRevealedPosition[image.name] {
+                    // Si ya hay una dirección establecida, verifica si la revelación actual es válida
+                    let isValidReveal = validateRevealDirection(currentRow: row, currentColumn: column, lastPosition: lastPosition, direction: direction)
+                    if isValidReveal {
+                        gameImages[row][column].isRevealed = true
+                        gameSettings.lastRevealedPosition[image.name] = (row, column)
+                        // Actualiza el juego basado en esta revelación
+                    } else {
+                        // Manejar el caso donde la revelación no es válida según la dirección
+                        // Podría ser ignorando la acción o mostrando algún feedback al usuario
+                    }
+                } else {
+                    // Si no hay dirección establecida, este es el primer elemento revelado de su tipo
+                    // Establece la dirección de la siguiente revelación aquí
+                    let direction: GameSettings.Direction = .right
+                    gameSettings.setRevealDirection(for: image.name, direction: direction)
+                    gameSettings.lastRevealedPosition[image.name] = (row, column)
+                }
 
-                // Aplica la lógica para revelar imágenes del mismo tipo en la dirección determinada
-               // revealSameTypeImages(fromRow: row, column: column, type: image.name)
+                checkGameOver()
             }
+        }
 
-           checkGameOver()
+    func validateRevealDirection(currentRow: Int, currentColumn: Int, lastPosition: (row: Int, column: Int), direction: GameSettings.Direction) -> Bool {
+        switch direction {
+        case .up:
+            return currentRow == lastPosition.row - 1 && currentColumn == lastPosition.column
+        case .down:
+            return currentRow == lastPosition.row + 1 && currentColumn == lastPosition.column
+        case .left:
+            return currentColumn == lastPosition.column - 1 && currentRow == lastPosition.row
+        case .right:
+            return currentColumn == lastPosition.column + 1 && currentRow == lastPosition.row
         }
     }
-    
+
     
     func revealSameTypeImages(fromRow row: Int, column: Int, type: String) {
         guard let direction = gameSettings.revealDirection[type] else { return }

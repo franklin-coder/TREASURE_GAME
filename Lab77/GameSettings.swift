@@ -42,6 +42,13 @@ class GameSettings: ObservableObject {
         func setRevealDirection(for type: String, direction: Direction) {
             revealDirection[type] = direction
         }
+    
+    @Published var lastRevealedPosition: [String: (row: Int, column: Int)] = [:]
+    
+
+
+
+
 }
 
 //@Published lo que me permite es que cuando estoy usando el protocolo de ObservableObject entonces usando este decorador me permite actualizar este valor donde sea que se este usando independiente de la vista por ejemplo si lo modifico en los steepers entonces me lo actualizara en la vista de gameView y por suspuesto en la clase ademas de su propio vista
