@@ -3,7 +3,7 @@
 //  LAB7
 //
 //  Created by IMD 224 on 2024-02-22.
-//
+
 
 import Foundation
 import SwiftUI
@@ -24,6 +24,6 @@ struct GameImage: Identifiable, Hashable {
     var id = UUID()
     var name: String
     var isRevealed: Bool = false
-    var isFirstRevealed: Bool = false // Indica si esta imagen fue la primera de su tipo en ser revelada
+   
 }
 

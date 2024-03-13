@@ -32,18 +32,6 @@ class GameSettings: ObservableObject {
           remains = 0// algún valor inicial, dependiendo de tu lógica de juego GameView
       }
     
-    @Published var revealDirection: [String: Direction] = [:]
-
-        enum Direction {
-            case left, right, up, down
-        }
-
-        // Método para establecer la dirección de revelado para un tipo de imagen
-        func setRevealDirection(for type: String, direction: Direction) {
-            revealDirection[type] = direction
-        }
-    
-    @Published var lastRevealedPosition: [String: (row: Int, column: Int)] = [:]
     
 
 
