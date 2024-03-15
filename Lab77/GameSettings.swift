@@ -7,29 +7,44 @@
 
 import SwiftUI
 
-class GameSettings: ObservableObject { 
+
+/// this class allows to recolect the data from my steepers sepately and get the total items. it should be observable to be able to use the properties in other views
+/// similar to a  static class that can be accessed from other views using this protocol
+class GameSettings: ObservableObject {
     
+    /// this variable will contain the total amount of all the steeper and making a sum to return that total that will determine the size of my grid
     var gridSize: Int {
            return numberOfCats + numberOfDogs + numberOfCircles
        }
     
     
-    // observable Object es basicamente lo que manejasmo en unity o c# como una clase static que puede ser accedida solo con llaamrla desde cualquier otro lugar dentro del namespace aqui es lo mismo desde cualquier vista puedo acceder teniendo este protocolo
-    //lo estoy usando por que necesito pasar estas variables tanto a mi sertings como a mi gameView entonces no estoy usando binding como usualmente sino el protocolo observableObject
-    @Published var numberOfCats: Int = 0  // variable que me alcacenara mi numero de cat en los steepers
-    @Published var numberOfDogs: Int = 0 // variable que me almacenara numero de dogs de los steeper
-    @Published var numberOfCircles: Int = 0 // variable que me almacenara numero de circles en los steepers
     
-    // Nuevas propiedades para controlar el estado del juego
+    ///Every time a @Published property changes, it notifies all observing views so they can update..
+    ///  this variable will stoarage my total amount fior my cat type  variable que me alcacenara mi numero de cat of all  my steepers
+    @Published var numberOfCats: Int = 0
+    /// variable que me alcacenara mi numero de cat en los steepers
+    @Published var numberOfDogs: Int = 0
+    /// variable que me alcacenara mi numero de cat en los steepers
+    @Published var numberOfCircles: Int = 0
+    
+    
+    
+    
+    
+    
+    /// this new properties allow to control de game  to show the text game over start false but when the user have achieved all the correect one It will be updated
     @Published var isGameOver: Bool = false
+    /// this new properties allow to control general attempts
     @Published var attempts: Int = 0
+    /// this new properties allow to control de game  to show the text game over start false but when the user have achieved all the correect one It will be updated
     @Published var remains: Int = 0
     
-    // Método para reiniciar el juego
+   
+    /// this fuction it is going to reset all the variable.
       func resetGame() {
           isGameOver = false
           attempts = 0
-          remains = 0// algún valor inicial, dependiendo de tu lógica de juego GameView
+          remains = 0
       }
     
     
@@ -39,6 +54,5 @@ class GameSettings: ObservableObject {
 
 }
 
-//@Published lo que me permite es que cuando estoy usando el protocolo de ObservableObject entonces usando este decorador me permite actualizar este valor donde sea que se este usando independiente de la vista por ejemplo si lo modifico en los steepers entonces me lo actualizara en la vista de gameView y por suspuesto en la clase ademas de su propio vista
 
-//Cada vez que una propiedad @Published cambia, notifica a todas las vistas que la observan para que se actualicen.
+///Every time a @Published property changes, it notifies all observing views so they can update..

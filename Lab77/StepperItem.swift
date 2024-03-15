@@ -9,24 +9,30 @@ import Foundation
 import SwiftUI
 
 
-//paso 3 en este paso lo que hacemos en identificable cada steeper y hashable
+///This would be my structure for each Steeper with their properties
+
 struct StepperItem: Identifiable, Hashable {
-    var id = UUID() // mi id para cada steeper
-    var label: String // el string que voy a mostrar
-    var value: Int = 0 // mi valor inicial de mi steeper
-    var type: ItemType // variable que me llama mi enumerador que contiene mis tres opcines
+    /// individual id for each steeper
+    var id = UUID()
+    /// this is going to be the label for each steeper this will show the type taking the rawValue of each picker and putting as label
+    var label: String //
+    /// The initial value for each stepper
+    var value: Int = 0
+    /// variable with a enum as value than contain each type of image
+    var type: ItemType
     
-    
-   // aca mi enum que almacena mis tres opciones en la variable type
+
+    /// here my enum for my variable type storage all my cases or types
+    /// it should be type string to get the name, CaseIterable to be able to go for eachone using foreach, and identifable to be able to differenciate each one
     enum ItemType: String, CaseIterable, Identifiable {
         case dog = "Dog"
         case cat = "Cat"
         case circle = "Circle"
         
-        var id: Self { self } // variable que me asigna el id a cada uno en cada interacion pero a cada case
+        /// variable que me asigna el id a cada uno en cada interacion pero a cada case
+        var id: Self { self }
     
     }
 }
 
 
-// son diferentes UUID() por que este se usa en struct o clases y me da un id para la cklase en general independiente de sus propiedades perovar id: Self { self }  me le da un id a cada caso de el enum y por eso se usan es en los enum

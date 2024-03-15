@@ -7,23 +7,16 @@
 
 import Foundation
 import SwiftUI
-//paso 1
-// clase o struct que me permite almacenar mis ids para identificar cada image definir el string osea mi ? y definir si esta revelada o no para tener el control
-//struct GameImage: Identifiable , Hashable {// identifable es que tiene in id diferente cada instancia
-//    //hashable es que puedo comparar con la misma clase siendo instacias diferentes me permitira saber si es la misma o no
-//    var id = UUID() // genero el id para hacerlo identifable cuando pongo identifable esta linea es escencial
-//
-//    var name: String // espacio para mi string que lo definire mas adelante
-//
-//    var isRevealed: Bool = false // mi variab le iniicla mnet estara false para que que todads aparezcan volteadas en la funcion setup que voy a realizar mas adelante
-//
-//
-//}
 
+///This would be my structure for each image with their properties
+///identiflable and hashable to be able to create diferents instances.
 struct GameImage: Identifiable, Hashable {
+    /// to assign a different ID for each instance
     var id = UUID()
+    /// name of each instance "image"
     var name: String
-    var isRevealed: Bool = false
+    /// variable to determine is the image is shown or not. Initially it would be false
+    var isRevealed: Bool = false 
    
 }
 

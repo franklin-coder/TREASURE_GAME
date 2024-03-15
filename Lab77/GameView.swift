@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct GameView: View {
     @ObservedObject var gameSettings: GameSettings
     @State private var board: Board
@@ -59,7 +60,12 @@ struct GameView: View {
     }
     
     
+    /// pruab dos
     func setupGame() {
+        
+        gameSettings.resetGame()
+        
+        
         let rowCount = board.boardSize
         // Inicializa gameImages con placeholders
         gameImages = Array(repeating: Array(repeating: GameImage(name: "house"), count: rowCount), count: rowCount)
@@ -73,12 +79,14 @@ struct GameView: View {
 
     func placeImagesOfType(_ type: String, count: Int, in rowCount: Int) {
         var placed = false
+        
+        // Asegúrate de que rowCount sea al menos 2 para evitar un rango inválido
+        guard rowCount >= 2 else { return }
+        
         while !placed {
-            // Decide si el grupo estará en una fila o columna de manera aleatoria
             let inRow = Bool.random()
-            let lineIndex = Int.random(in: 0..<rowCount)
-
-            // Encuentra espacios disponibles
+            let lineIndex = Int.random(in: 0..<rowCount) // Ahora rowCount es al menos 2
+            
             var availableSpots: [Int] = Array(0..<rowCount)
             for i in 0..<rowCount {
                 let image = inRow ? gameImages[lineIndex][i] : gameImages[i][lineIndex]
@@ -86,13 +94,11 @@ struct GameView: View {
                     availableSpots.removeAll { $0 == i }
                 }
             }
-
-            // Verifica si hay espacio suficiente en la fila/columna elegida
+            
+            // Verifica si hay espacio suficiente para colocar las imágenes
             if availableSpots.count >= count {
-                let start = availableSpots.randomElement()!
-                let end = start + count <= rowCount ? start + count : start
-                if end > start {
-                    for i in start..<end {
+                if let start = availableSpots.randomElement(), start + count <= rowCount {
+                    for i in start..<start + count {
                         if inRow {
                             gameImages[lineIndex][i] = GameImage(name: type)
                         } else {
@@ -106,6 +112,7 @@ struct GameView: View {
     }
 
 
+
     
     
     func revealImage(atRow row: Int, column: Int) {
@@ -114,7 +121,11 @@ struct GameView: View {
             gameImages[row][column].isRevealed = true
             gameSettings.attempts += 1
             //
-            
+            // Si la imagen revelada no es la default, aumenta remains
+                  if image.name != "house" {
+                      gameSettings.remains += 1
+                  }
+                  
             checkGameOver()
         }
     }
@@ -151,6 +162,4 @@ struct GameView: View {
 }//final body
 
 
-//#Preview {
-//    GameView(gameSettings: gameSettings)
-//}
+

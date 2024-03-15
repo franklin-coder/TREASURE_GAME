@@ -7,34 +7,42 @@
 
 import SwiftUI
 
-// paso 4 aca voy a implementar la vista del setting view que segun el lab dice que debo tener dos steeper y parar con un binding a cada steeper al numero a mi gameView para definir el numero de columnas y filas y cuantos debe de adivinar
+
+
 struct SettingsView: View {
-    @ObservedObject var gameSettings: GameSettings  // llamo mi clase de gameSetting donde tengo todas mis variables  que voy a usar para almacenar los valores osea cantidad de cada steeper y tipo de imagen cada una con su respectivo id
-    @State private var stepperItems: [StepperItem] = [] // lamo mi clase steeper que tambien tiene su propio id en cada instancia  le estoy pasando un alista ya que est tipo array y el tipo es de la clase osea que cada elemento contiene todas las propiedades de la clase asi cada vez que le de al mas se agragara un steeper pero con estas caracteristicas y se pasa como estado por que obviamente puede cambiar
+    /// Here it is storaging all my GameSettings with all the properties
+    @ObservedObject var gameSettings: GameSettings
+    /// Here I am creating an empty array to storage my steepers usign my stepperItem as datatype for all my items inside the array
+    @State private var stepperItems: [StepperItem] = []
 
     
   
     
     var body: some View {
         
-        
+        ///This allows you to display elements within your view so that it shows the buttons at the top, then the title, and then the list of steppers
         NavigationView {
-            //este me permite mostrar los elementos dentro de mi vista para que me muestre los botones arriba luego el titulo y luego si la lista de steepers
-            List {  //este componnete basicamente es el mismo de ul en html que me permite mostrar en una lista verticalmente de los elementos asi como funciona la ul con los li solo que aca no hay que poner el li
-                ForEach($stepperItems.indices, id: \.self) { index in  //y aca estoy iterando sobre cada uno de los stteper item que pase al incio con el parametro de mi clase para que me traiga las properties por eso le paso dos parametros el primero es que indice osea cada valor que esre eb esta variable y segundo el id  de cada uno luego por cada item osea index creo una seccion que me permite mostrar de una manera mas organizada cada steeper con sus propiedades
-                    Section { // aca inicia la seccion de cada steeper
-                        Picker("", selection: $stepperItems[index].type) { // este simplemente es el encabezado de capa steeper que mepermite elegir entre las opciones que tengo en mi enum como type osea me permite elegir en cada una de los tipos dog cats and circles // tiene un bug por que en realidad nunca muestra el label en la seleccion lo que hago es pasar a mi steeper que es mi variable de arrays tipo steeper su index y entrar al type pero aun no se cual ha elegido solo almaceno el indice y los types
-                            ForEach(StepperItem.ItemType.allCases) { type in // La propiedad allCases es una característica de las enumeraciones en Swift que conforman al protocolo CaseIterable. Al declarar tu enumeración ItemType con CaseIterable, Swift automáticamente te proporciona esta propiedad, la cual incluye todas las instancias de los casos de enumeración.
-                                Text(type.rawValue).tag(type) //Text(type.rawValue): Crea una vista de texto para la opción actual en la iteración.
-                                   //type.rawValue se refiere al valor asociado de String para el caso de enumeración actual, que sería "Dog", "Cat", o "Circle" en tu ejemplo.
-                                  // El valor del tag debe ser del mismo tipo que la propiedad a la que está vinculada la selección del Picker ($stepperItems[index].type)
+          
+            ///This component is essentially the same as the ul in HTML, allowing me to display elements in a vertical list, similar to how ul works with li, except here there's no need to include the li.
+            List {
+                ///Here, I am iterating over each stepper item that I passed at the beginning with the parameter of my class to bring in the properties, which is why I pass two parameters: the first is the index, meaning each value in this variable, and the second is the id of each one. Then, for each item, i.e., index, I create a section that allows me to display in a more organized manner each stepper with its properties
+                ForEach($stepperItems.indices, id: \.self) { index in
+                    ///Here begins the section of each stepper.
+                    Section {
+                        ///This is simply the header of each stepper, which allows me to choose among the options I have in my enum, such as type, meaning it lets me choose among the types like dog, cats, and circles. There is a bug because it never actually shows the label in the selection. What I do is pass the index to my stepper, which is my array variable of type stepper, and access the type, but I still don't know which one has been chosen; I only store the index and the types.
+                        Picker("", selection: $stepperItems[index].type) {
+                            ForEach(StepperItem.ItemType.allCases) { type in /// The allCases property is a feature of enumerations in Swift that conform to the CaseIterable protocol. By declaring your enumeration ItemType with CaseIterable, Swift automatically provides you with this property, which includes all instances of the enumeration cases
+                                Text(type.rawValue).tag(type) ///Text(type.rawValue): Creates a text view for the current option in the iteration.
+                                   ///type.rawValue refers to the associated String value for the current enumeration case, which would be "Dog", "Cat", or "Circle" in your example.
+                                  /// The value of the tag must be of the same type as the property to which the Picker's selection ($stepperItems[index].type) is bound.
                             }
-                        } // acaba mi picker de la parte superiro de mi steeper que es la primera parte de cada una de mis secciones
-                        .pickerStyle(SegmentedPickerStyle()) //me permite visualizar en un segmento tipo titulo
+                        }
+                        .pickerStyle(SegmentedPickerStyle()) ///It allows me to visualize in a title-type segment
                         
-                        // aca simplemete agrego un steeper en cada seccion despues del picker el label sera el que me entrege el picker usando rawValue y el value inicial es el que tenga dentro de esa instancia que inicialmente lo puso 0 en la clase pero luego me va a mostarr si tenga mas cantidad por ejemplo elegi 1 esa instacia tiene 1 entonces me lo actualiza en ese steeper
+                        
+                        ///Here, I simply add a stepper in each section after the picker. The label will be provided by the picker using rawValue, and the initial value is what is held within that instance, which was initially set to 0 in the class. But later, it will update me if there is a greater quantity; for example, if I chose 1 and that instance has 1, then it updates me on that stepper
                         Stepper("\(stepperItems[index].type.rawValue): \(stepperItems[index].value)", value: $stepperItems[index].value, in: 0...10, onEditingChanged: { _ in
-                            updateGameSettings() // en cada on edit change osea cada vez que haga un cambio en edit sea que aumente el valor o lo disminuya  me llama la funcionupdateGameSettings() que me permite actualizar mis variables individuales de dogs cats and circles
+                            updateGameSettings() ///In each onEditChange, meaning every time I make a change in edit, whether increasing or decreasing the value, it calls the updateGameSettings() function, which allows me to update my individual variables for dogs, cats, and circles.
                         })
                     }//aca finaliza la seccion de cada steeper
                 } // aca termina mi for each
@@ -59,7 +67,7 @@ struct SettingsView: View {
             }
         }
     }
-  /// esta funcion privada simplemetante me toma los valores de dogs and cats separados
+    /// esta funcion privada simplemetante me toma los valores de dogs and cats separados
     private func updateGameSettings() {
         gameSettings.numberOfCats = stepperItems.filter { $0.type == .cat }.reduce(0) { $0 + $1.value }
         gameSettings.numberOfDogs = stepperItems.filter { $0.type == .dog }.reduce(0) { $0 + $1.value }
@@ -68,11 +76,15 @@ struct SettingsView: View {
         gameSettings.remains = 0
         gameSettings.attempts = 0
     }
-
+    
+    
     private func addStepperItem() {
         stepperItems.append(StepperItem(label: "New Item", type: .circle)) //agrega un nuevo steeper usando append con el label que elegi en mi picker y por default el circulo pero lo puedo cambiar sin problem
     }
-
+    
+    
+    /// Description
+    /// - Parameter offsets: <#offsets description#>
     private func deleteItems(at offsets: IndexSet) {  //esta funcion usa como parametro el indexSet que basicamente adjunta el indice seleccionado
         stepperItems.remove(atOffsets: offsets)  // aca elimino con la funcioon remove que usa atoffset para tener todos los indices pero le paso el propio indice osea el del mismo steeper con el que estoy interactuando
     }

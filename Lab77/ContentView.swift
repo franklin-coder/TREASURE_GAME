@@ -11,16 +11,23 @@ import SwiftUI
 
 struct ContentView: View {
     
+    
+    
+    
+    /// @StateObject means that everytime that a published property change is going to notify that change to the gamesettings
     @StateObject var gameSettings = GameSettings()
-    //Al marcar el objeto observable con @StateObject, le dices a SwiftUI que observe este objeto y actualice la vista cada vez que cambie alguna de sus propiedades @Published. Esto asegura que tu interfaz de usuario refleje siempre el estado actual de tus datos.
-  
+       
+    
+    
+    /// tableView allows to have diferentes view using a bar on the botton of the screen
     var body: some View {
         TabView {
-            SettingsView(gameSettings: gameSettings) // aca le paso a cada una de las vistas mi clase gamesetting que es observable y por eso uso el stateObject para que me refle los cambios echos en cualquier vista
+            /// call my view and pass as parameter the variable that have my gamesettings
+            SettingsView(gameSettings: gameSettings)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
-            
+            /// call my view and pass as parameter the variable that have my gamesettings
             GameView(gameSettings: gameSettings) // aca le paso a cada una de las vistas mi clase gamesetting que es observable y por eso uso el stateObject para que me refle los cambios echos en cualquier vista
                 .tabItem {
                     Label("Settings", systemImage: "house")

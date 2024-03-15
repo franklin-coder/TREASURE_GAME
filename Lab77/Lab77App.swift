@@ -11,6 +11,7 @@ import SwiftUI
 struct Lab77App: App {
     var body: some Scene {
         WindowGroup {
+            ///My ppal View that contains mi tab view with my application
             ContentView()
         }
     }
