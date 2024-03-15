@@ -40,7 +40,7 @@ class GameSettings: ObservableObject {
     @Published var remains: Int = 0
     
    
-    /// this fuction it is going to reset all the variable.
+    /// this fuction it is going to reset all the variables
       func resetGame() {
           isGameOver = false
           attempts = 0

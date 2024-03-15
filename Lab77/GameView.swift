@@ -8,12 +8,18 @@
 import SwiftUI
 
 
+/// thie view shows and control de game grid images game over, attempts and matches
 struct GameView: View {
-    @ObservedObject var gameSettings: GameSettings
-    @State private var board: Board
     
+    /// here it is getting all the data from Gamesetting and storaging in this variable to be able to access to the properties and funtionality
+    @ObservedObject var gameSettings: GameSettings
+    /// here it is getting all the data from Board Class and storaging in this variable to be able to access to the properties and funtionality
+    @State private var board: Board
+    /// this is a bidimentional array starting empty and using as a datatype my struct GameImage with all the properties
     @State private var gameImages: [[GameImage]] = []
     
+    /// here I create a new initializer passing as parametre my GameSettings with the idea to include my board and the variable gridsize from my gamesettings and assign to the boardsize in my instance of the clase
+    /// - Parameter gameSettings: GameSetting has the total items thats why i need to pass as parameter
     init(gameSettings: GameSettings) {
             self.gameSettings = gameSettings
             // Asumiendo que tienes una manera de determinar el tamaño del tablero basado en gameSettings
@@ -34,10 +40,11 @@ struct GameView: View {
                         Text("Game Over!").font(.headline)
                     }
                 }
-                // Crear la cuadrícula de imágenes
+                /// here it is painting the grid using the variable BoardSize that contain all my items
                 ForEach(0..<board.boardSize, id: \.self) { row in
                     HStack {
                         ForEach(0..<board.boardSize, id: \.self) { column in
+                            ///here it is avoiding to be ourt of the range
                             if row < gameImages.count && column < gameImages[row].count {
                                 let gameImage = gameImages[row][column]
                                 Image(systemName: gameImage.isRevealed ? "\(gameImage.name).fill" : "questionmark.circle")
@@ -60,23 +67,27 @@ struct GameView: View {
     }
     
     
-    /// pruab dos
+    /// this function allows to put all my images andy the empty array gameImages to fill it up
     func setupGame() {
-        
+        /// here im reseting the game on appears every time
         gameSettings.resetGame()
         
         
         let rowCount = board.boardSize
-        // Inicializa gameImages con placeholders
+        /// Initialize gameImages with placeholders.
         gameImages = Array(repeating: Array(repeating: GameImage(name: "house"), count: rowCount), count: rowCount)
 
-        // Prepara las imágenes por tipo
+        /// Prepare the images by type.
         let selections = [("cat", gameSettings.numberOfCats), ("dog", gameSettings.numberOfDogs), ("circle", gameSettings.numberOfCircles)]
         for (type, count) in selections {
             placeImagesOfType(type, count: count, in: rowCount)
         }
     }
 
+    
+    
+    
+    
     func placeImagesOfType(_ type: String, count: Int, in rowCount: Int) {
         var placed = false
         
@@ -115,6 +126,11 @@ struct GameView: View {
 
     
     
+    /// this fuction allows to change to true the variable isRevealed that mean it will show the image
+    /// - Parameters:
+    ///   - row: the current row that has the image has this is coming from tapGesture passing the same row that the image has
+    ///   - column: the current column that has the image has this is coming from tapGesture passing the same column that the image has
+    ///   also this function increasi the number of attempt every tapGesture and call the funcion game over every time to check is the game has ended, addictionally is checking is the image is different to the default it will increase the matches found
     func revealImage(atRow row: Int, column: Int) {
         let image = gameImages[row][column]
         if !image.isRevealed {
@@ -133,6 +149,7 @@ struct GameView: View {
     
     
     
+    /// esta funcion me permite crear un diccionario y luego iterar por cada fila y cada columna para checkear las imagenes que han sido reveladas luego valido si las cantidfades de cada type son iguales a las que temngo en mi gamesettings que toma los valores totales de mis steeper por type  y valido si la cantidad es igual en cada type quiere decir que ya encontro todos los tesoros
     func checkGameOver() {
         var counts = [String: Int]()
         

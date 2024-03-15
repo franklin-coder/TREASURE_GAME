@@ -47,16 +47,14 @@ struct SettingsView: View {
                     }//aca finaliza la seccion de cada steeper
                 } // aca termina mi for each
                 
-                .onDelete(perform: deleteItems) // funciona cuando tenemos una lista y permite la eliminacion en este caso pasamos un offset osea el indice que queremos eliminar en este caso pase una funcion que es la que me elimina private
-                //func deleteItems(at offsets: IndexSet) {
-                //stepperItems.remove(atOffsets: offsets)
-                //}
+                .onDelete(perform: deleteItems)
+                
                 
             } // aca termina mi lista
             .listStyle(GroupedListStyle()) // simplemente para que me le de formato a mi lista sin tener que crearlo yo
             .navigationTitle("Settings") //  este es mi titulo dentro de navigation view
             .toolbar { // mi barra de opciones superior
-                ToolbarItem(placement: .navigationBarTrailing) { // boton de edit que llama su propia funcoon EditBottun()
+                ToolbarItem(placement: .navigationBarTrailing) { /// boton de edit que llama su propia funcoon EditBottun()
                     EditButton().foregroundColor(.cyan)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) { // boton de plus o sumar para agregar un nuevo steeper y llama la funcion de adicionar
@@ -67,7 +65,7 @@ struct SettingsView: View {
             }
         }
     }
-    /// esta funcion privada simplemetante me toma los valores de dogs and cats separados
+    /// esta funcion privada simplemetante me toma los valores de dogs and cats separados using a map of mi steeper item and taking each type and updateing the variable with the amount
     private func updateGameSettings() {
         gameSettings.numberOfCats = stepperItems.filter { $0.type == .cat }.reduce(0) { $0 + $1.value }
         gameSettings.numberOfDogs = stepperItems.filter { $0.type == .dog }.reduce(0) { $0 + $1.value }
@@ -78,14 +76,15 @@ struct SettingsView: View {
     }
     
     
+    /// Add a new stepper using append with the label I chose in my picker, and by default the circle, but I can change it without a problem
     private func addStepperItem() {
-        stepperItems.append(StepperItem(label: "New Item", type: .circle)) //agrega un nuevo steeper usando append con el label que elegi en mi picker y por default el circulo pero lo puedo cambiar sin problem
+        stepperItems.append(StepperItem(label: "New Item", type: .circle))
     }
     
     
-    /// Description
-    /// - Parameter offsets: <#offsets description#>
-    private func deleteItems(at offsets: IndexSet) {  //esta funcion usa como parametro el indexSet que basicamente adjunta el indice seleccionado
+    /// This function allows to delete each steeper
+    /// - Parameter offsets: indexSet as a parameter, which essentially attaches the selected index.
+    private func deleteItems(at offsets: IndexSet) {  //
         stepperItems.remove(atOffsets: offsets)  // aca elimino con la funcioon remove que usa atoffset para tener todos los indices pero le paso el propio indice osea el del mismo steeper con el que estoy interactuando
     }
 }
